@@ -1,0 +1,39 @@
+@echo off
+title Auto GitHub Commits
+
+echo =========================
+echo Enter your GitHub name:
+set /p username=
+
+echo Enter your GitHub email:
+set /p email=
+
+echo Enter your repo URL:
+set /p repo=
+
+git config --global user.name "%username%"
+git config --global user.email "%email%"
+
+mkdir commits
+cd commits
+
+git init
+git remote add origin %repo%
+
+echo hello > file.txt
+
+git add .
+git commit -m "first commit"
+
+FOR /L %%i IN (1,1,120) DO (
+  echo update %%i >> file.txt
+  git add .
+  git commit -m "commit %%i"
+)
+
+git branch -M main
+git push -u origin main
+
+echo =========================
+echo DONE! 120 commits pushed
+pause
